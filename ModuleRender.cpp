@@ -35,6 +35,24 @@ bool ModuleRender::Init()
 		LOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
+	else
+	{
+		target = SDL_CreateTexture(
+			renderer,
+			SDL_GetWindowPixelFormat(App->window->window),
+			SDL_TEXTUREACCESS_TARGET,
+			SCREEN_WIDTH,
+			SCREEN_HEIGHT);
+
+		if (target != nullptr)
+		{
+			if (SDL_SetRenderTarget(renderer, target) != 0)
+			{
+				LOG("Could not set render target SDL_Error: %s\n", SDL_GetError());
+				ret = false;
+			}
+		}
+	}
 
 	return ret;
 }
@@ -42,6 +60,7 @@ bool ModuleRender::Init()
 // Called every draw update
 update_status ModuleRender::PreUpdate()
 {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
 	return update_status::UPDATE_CONTINUE;
@@ -71,8 +90,11 @@ update_status ModuleRender::Update()
 
 update_status ModuleRender::PostUpdate()
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderTarget(renderer, NULL);
+	SDL_RenderCopy(renderer, target, NULL, NULL);
 	SDL_RenderPresent(renderer);
+	SDL_SetRenderTarget(renderer, target);
+
 	return update_status::UPDATE_CONTINUE;
 }
 
@@ -80,6 +102,8 @@ update_status ModuleRender::PostUpdate()
 bool ModuleRender::CleanUp()
 {
 	LOG("Destroying renderer");
+	
+	SDL_DestroyTexture(target);
 
 	//Destroy window
 	if(renderer != NULL)

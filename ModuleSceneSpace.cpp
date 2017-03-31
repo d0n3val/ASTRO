@@ -140,7 +140,7 @@ update_status ModuleSceneSpace::Update()
 	SDL_UnlockTexture(twater);
 	
 
-	App->render->Blit(twater, 0, 0, NULL, 1.0f, false);
+	//App->render->Blit(twater, 0, 0, NULL, 1.0f, false);
 
 	//SDL_DestroyTexture(t);
 	
