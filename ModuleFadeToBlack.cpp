@@ -3,8 +3,14 @@
 #include "Application.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleRender.h"
-#include "SDL/include/SDL_render.h"
-#include "SDL/include/SDL_timer.h"
+
+#ifdef WIN32
+	#include "SDL/include/SDL_render.h"
+	#include "SDL/include/SDL_timer.h"
+#else
+	#include "SDL_render.h"
+	#include "SDL_timer.h"
+#endif
 
 ModuleFadeToBlack::ModuleFadeToBlack()
 {

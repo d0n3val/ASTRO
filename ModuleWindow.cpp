@@ -1,7 +1,12 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
-#include "SDL/include/SDL.h"
+
+#ifdef WIN32
+	#include "SDL/include/SDL.h"
+#else
+	#include "SDL.h"
+#endif
 
 ModuleWindow::ModuleWindow() : Module()
 {
@@ -20,8 +25,7 @@ bool ModuleWindow::Init()
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		LOG("SDL_VIDEO could not initialize! SDL_Error:\n");
-		LOG(SDL_GetError());
+		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	else
@@ -29,7 +33,7 @@ bool ModuleWindow::Init()
 		//Create window
 		int width = SCREEN_WIDTH * SCREEN_SIZE;
 		int height = SCREEN_HEIGHT * SCREEN_SIZE;
-		Uint32 flags = SDL_WINDOW_SHOWN;
+		Uint32 flags = 0;
 
 		if(WIN_FULLSCREEN == true)
 			flags |= SDL_WINDOW_FULLSCREEN;
@@ -43,18 +47,19 @@ bool ModuleWindow::Init()
 		if(WIN_FULLSCREEN_DESKTOP == true)
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-		window = SDL_CreateWindow(WIN_TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(WIN_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 
 		if(window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
 		}
+		/*
 		else
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
-		}
+		}*/
 	}
 
 	return ret;

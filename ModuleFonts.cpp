@@ -4,7 +4,7 @@
 #include "ModuleRender.h"
 #include "ModuleFonts.h"
 
-#include<string.h>
+#include <string.h>
 
 // Constructor
 ModuleFonts::ModuleFonts() : Module()
@@ -47,7 +47,7 @@ int ModuleFonts::Load(const char* texture_path, const char* characters, uint row
 	// if we reach this point we can safely create a new bmp font
 	Font* f = &fonts[id];
 	f->graphic = tex;
-	strcpy_s(fonts[id].table, MAX_FONT_CHARS, characters);
+	strncpy(fonts[id].table, characters, MAX_FONT_CHARS);
 	f->rows = rows;
 	f->len = strlen(characters);
 	f->row_chars = fonts[id].len / rows;

@@ -1,9 +1,14 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
-#include "SDL\include\SDL_rect.h"
+#ifdef WIN32
+	#include "SDL/include/SDL_rect.h"
+#else
+	#include "SDL_rect.h"
+#endif
 
-#define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+#define LOG(format, ...) log(__FILE__, __LINE__, format, ##__VA_ARGS__)
+
 void log(const char file[], int line, const char* format, ...);
 
 #define EXIT_FAILURE 1

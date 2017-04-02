@@ -1,5 +1,10 @@
-#include <windows.h>
 #include <stdio.h>
+
+#ifdef WIN32
+	#include "SDL/include/SDL_log.h"
+#else
+	#include "SDL_log.h"
+#endif
 
 void log(const char file[], int line, const char* format, ...)
 {
@@ -9,8 +14,8 @@ void log(const char file[], int line, const char* format, ...)
 
 	// Construct the string from variable arguments
 	va_start(ap, format);
-	vsprintf_s(tmp_string, 4096, format, ap);
+	vsnprintf(tmp_string, 4096, format, ap);
 	va_end(ap);
-	sprintf_s(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
-	OutputDebugString(tmp_string2);
+	snprintf(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
+	SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "%s", tmp_string2);
 }

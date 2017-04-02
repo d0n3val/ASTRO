@@ -2,7 +2,6 @@
 #define __MODULEFADETOBLACK_H__
 
 #include "Module.h"
-#include "SDL\include\SDL_rect.h"
 
 class ModuleFadeToBlack : public Module
 {

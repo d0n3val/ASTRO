@@ -3,9 +3,13 @@
 #include "Globals.h"
 #include "MemLeaks.h"
 
-#include "SDL/include/SDL.h"
-#pragma comment( lib, "SDL/libx86/SDL2.lib" )
-#pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+#ifdef WIN32
+	#include "SDL/include/SDL.h"
+	#pragma comment( lib, "SDL/libx86/SDL2.lib" )
+	#pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+#else
+	#include "SDL.h"
+#endif
 
 enum main_states
 {
@@ -79,6 +83,8 @@ int main(int argc, char* argv[])
 
 			} break;
 
+			case MAIN_EXIT:
+			{} break;
 		}
 	}
 

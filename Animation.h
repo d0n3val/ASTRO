@@ -1,7 +1,12 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-#include "SDL/include/SDL_rect.h"
+#ifdef WIN32
+	#include "SDL/include/SDL_rect.h"
+#else
+	#include "SDL_rect.h"
+#endif
+
 #define MAX_FRAMES 25
 
 class Animation

@@ -3,7 +3,12 @@
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "SDL/include/SDL.h"
+
+#ifdef WIN32
+	#include "SDL/include/SDL.h"
+#else
+	#include "SDL.h"
+#endif
 
 ModuleRender::ModuleRender() : Module()
 {
@@ -28,7 +33,10 @@ bool ModuleRender::Init()
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 	}
 
-	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
+	renderer = SDL_GetRenderer(App->window->window);
+
+	if(renderer == nullptr)
+		renderer = SDL_CreateRenderer(App->window->window, -1, flags);
 	
 	if(renderer == NULL)
 	{

@@ -9,7 +9,12 @@
 #include "ModuleEnemies.h"
 #include "ModuleSceneSpace.h"
 #include "ModuleWindow.h"
-#include "SDL/include/SDL.h"
+
+#ifdef WIN32
+	#include "SDL/include/SDL.h"
+#else
+	#include "SDL.h"
+#endif
 
 // Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 
@@ -127,7 +132,7 @@ update_status ModuleSceneSpace::Update()
 	int r = SDL_RenderReadPixels(App->render->renderer, &screen_chunk, format, pixels, pitch);
 	if (r != 0)
 	{
-		LOG("Cannot read pixels: %s\n", SDL_GetError())
+		LOG("Cannot read pixels: %s\n", SDL_GetError());
 	}
 
 	//SDL_Texture* t = SDL_CreateTextureFromSurface(App->render->renderer, water);

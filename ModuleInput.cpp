@@ -1,7 +1,13 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
-#include "SDL/include/SDL.h"
+
+#ifdef WIN32
+	#include "SDL/include/SDL.h"
+#else
+	#include "SDL.h"
+#endif
+
 
 ModuleInput::ModuleInput() : Module()
 {

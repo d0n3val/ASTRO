@@ -4,9 +4,14 @@
 #include "ModuleTextures.h"
 #include <string.h>
 
-#include "SDL/include/SDL.h"
-#include "SDL_image/include/SDL_image.h"
-#pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
+#ifdef WIN32
+	#include "SDL/include/SDL.h"
+	#include "SDL_image/include/SDL_image.h"
+	#pragma comment( lib, "SDL_image/libx86/SDL2_image.lib" )
+#else
+	#include "SDL.h"
+	#include "SDL_image.h"
+#endif
 
 ModuleTextures::ModuleTextures() : Module()
 {

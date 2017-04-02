@@ -3,7 +3,12 @@
 
 #include "Globals.h"
 #include "Module.h"
-#include "SDL_mixer/include/SDL_mixer.h"
+
+#ifdef WIN32
+	#include "SDL_mixer/include/SDL_mixer.h"
+#else
+	#include "SDL_mixer.h"
+#endif
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 #define MAX_FX 200

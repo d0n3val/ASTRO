@@ -7,7 +7,11 @@
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
 
-#include "SDL/include/SDL_timer.h"
+#ifdef WIN32
+	#include "SDL/include/SDL_timer.h"
+#else
+	#include "SDL_timer.h"
+#endif
 
 ModuleParticles::ModuleParticles()
 {

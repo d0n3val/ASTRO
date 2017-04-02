@@ -3,7 +3,12 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "SDL\include\SDL_scancode.h"
+
+#ifdef WIN32
+	#include "SDL_mixer/include/SDL_scancode.h"
+#else
+	#include "SDL_scancode.h"
+#endif
 
 #define MAX_KEYS 300
 
