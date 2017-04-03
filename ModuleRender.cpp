@@ -59,6 +59,17 @@ bool ModuleRender::Init()
 				LOG("Could not set render target SDL_Error: %s\n", SDL_GetError());
 				ret = false;
 			}
+			else
+			{
+				water = SDL_CreateTexture(
+					renderer,
+					SDL_GetWindowPixelFormat(App->window->window),
+					SDL_TEXTUREACCESS_TARGET,
+					SCREEN_WIDTH,
+					WATER_TEX_HEIGHT);
+
+				SDL_SetTextureColorMod(water, 100, 100, 255);
+			}
 		}
 	}
 
@@ -98,6 +109,7 @@ update_status ModuleRender::Update()
 
 update_status ModuleRender::PostUpdate()
 {
+	FullScreenEffects();
 	SDL_SetRenderTarget(renderer, NULL);
 	SDL_RenderCopy(renderer, target, NULL, NULL);
 	SDL_RenderPresent(renderer);
@@ -111,10 +123,11 @@ bool ModuleRender::CleanUp()
 {
 	LOG("Destroying renderer");
 	
+	SDL_DestroyTexture(water);
 	SDL_DestroyTexture(target);
 
 	//Destroy window
-	if(renderer != NULL)
+	if(renderer != nullptr)
 	{
 		SDL_DestroyRenderer(renderer);
 	}
@@ -190,4 +203,16 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+void ModuleRender::FullScreenEffects()
+{
+	SDL_SetRenderTarget(renderer, water);
+	SDL_Rect src = {0, SCREEN_HEIGHT - WATER_TEX_HEIGHT - WATER_HEIGHT, SCREEN_WIDTH, WATER_TEX_HEIGHT};
+	SDL_RenderCopy(renderer, target, &src, NULL);
+
+	SDL_SetRenderTarget(renderer, target);
+	SDL_Rect dst = {0, SCREEN_HEIGHT - WATER_HEIGHT, SCREEN_WIDTH, WATER_HEIGHT};
+	SDL_RenderCopyEx(renderer, water, NULL, &dst, 0, NULL, SDL_FLIP_VERTICAL);
+	
 }

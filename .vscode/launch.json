@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/osx/debug/ASTRO",
             "args": [],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "${workspaceRoot}/Game",
             "environment": [],
             "externalConsole": true,

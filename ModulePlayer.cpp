@@ -73,7 +73,7 @@ update_status ModulePlayer::Update()
 
 	if (App->input->keyboard[SDL_SCANCODE_DOWN] == KEY_STATE::KEY_REPEAT)
 	{
-		if (position.y - App->render->camera.y < SCREEN_HEIGHT - 21)
+		if (position.y - App->render->camera.y < SCREEN_HEIGHT - 24 - WATER_HEIGHT)
 			position.y += speed;
 
 		if (current_animation != &down)
