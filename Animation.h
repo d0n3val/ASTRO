@@ -1,7 +1,7 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL/include/SDL_rect.h"
 #else
 	#include "SDL_rect.h"

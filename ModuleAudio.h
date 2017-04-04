@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "Module.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL_mixer/include/SDL_mixer.h"
 #else
 	#include "SDL_mixer.h"

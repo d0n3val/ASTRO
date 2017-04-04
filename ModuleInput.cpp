@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL/include/SDL.h"
 #else
 	#include "SDL.h"

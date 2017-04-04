@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL/include/SDL_log.h"
 #else
 	#include "SDL_log.h"
