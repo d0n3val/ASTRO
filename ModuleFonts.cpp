@@ -6,6 +6,10 @@
 
 #include <string.h>
 
+#ifdef _WIN32
+	#define strncpy strncpy_s
+#endif
+
 // Constructor
 ModuleFonts::ModuleFonts() : Module()
 {}

@@ -1,7 +1,7 @@
 #ifndef __MEMLEAKS_H__
 #define __MEMLEAKS_H__
 
-#ifdef WIN32
+#ifdef _WIN32
 
 	#define _CRTDBG_MAP_ALLOC
 	#include <stdlib.h>

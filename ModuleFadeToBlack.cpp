@@ -4,7 +4,7 @@
 #include "ModuleFadeToBlack.h"
 #include "ModuleRender.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL/include/SDL_render.h"
 	#include "SDL/include/SDL_timer.h"
 #else

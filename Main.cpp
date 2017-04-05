@@ -3,7 +3,7 @@
 #include "Globals.h"
 #include "MemLeaks.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL/include/SDL.h"
 	#pragma comment( lib, "SDL/libx86/SDL2.lib" )
 	#pragma comment( lib, "SDL/libx86/SDL2main.lib" )

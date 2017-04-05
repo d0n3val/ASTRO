@@ -1,11 +1,13 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "SDL/include/SDL_rect.h"
 #else
 	#include "SDL_rect.h"
 #endif
+
+
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, ##__VA_ARGS__)
 

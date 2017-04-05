@@ -4,8 +4,8 @@
 #include "Module.h"
 #include "Globals.h"
 
-#ifdef WIN32
-	#include "SDL_mixer/include/SDL_scancode.h"
+#ifdef _WIN32
+	#include "SDL/include/SDL_scancode.h"
 #else
 	#include "SDL_scancode.h"
 #endif
