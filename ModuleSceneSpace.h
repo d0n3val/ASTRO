@@ -22,8 +22,6 @@ public:
 	SDL_Texture* background0 = nullptr;
 	SDL_Texture* hud = nullptr;
 	SDL_Texture* stars = nullptr;
-	SDL_Surface* water = nullptr;
-	SDL_Texture* twater = nullptr;
 
 	int scroll0 = 0;
 	int scroll = 0;

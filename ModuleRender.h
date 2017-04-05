@@ -6,8 +6,8 @@
 struct SDL_Renderer;
 struct SDL_Texture;
 
-#define WATER_HEIGHT 38
-#define WATER_TEX_HEIGHT 100
+#define WATER_HEIGHT 100
+#define WATER_TEX_HEIGHT 300
 
 class ModuleRender : public Module
 {
@@ -30,6 +30,7 @@ public:
 	SDL_Rect camera;
 	SDL_Texture* target = nullptr;
 	SDL_Texture* water = nullptr;
+	bool effect_water = false;
 };
 
 #endif //__ModuleRenderer_H__

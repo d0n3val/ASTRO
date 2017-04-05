@@ -207,12 +207,14 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 
 void ModuleRender::FullScreenEffects()
 {
-	SDL_SetRenderTarget(renderer, water);
-	SDL_Rect src = {0, SCREEN_HEIGHT - WATER_TEX_HEIGHT - WATER_HEIGHT, SCREEN_WIDTH, WATER_TEX_HEIGHT};
-	SDL_RenderCopy(renderer, target, &src, NULL);
+	if(effect_water == true)
+	{
+		SDL_SetRenderTarget(renderer, water);
+		SDL_Rect src = {0, SCREEN_HEIGHT - WATER_TEX_HEIGHT - WATER_HEIGHT, SCREEN_WIDTH, WATER_TEX_HEIGHT};
+		SDL_RenderCopy(renderer, target, &src, NULL);
 
-	SDL_SetRenderTarget(renderer, target);
-	SDL_Rect dst = {0, SCREEN_HEIGHT - WATER_HEIGHT, SCREEN_WIDTH, WATER_HEIGHT};
-	SDL_RenderCopyEx(renderer, water, NULL, &dst, 0, NULL, SDL_FLIP_VERTICAL);
-	
+		SDL_SetRenderTarget(renderer, target);
+		SDL_Rect dst = {0, SCREEN_HEIGHT - WATER_HEIGHT, SCREEN_WIDTH, WATER_HEIGHT};
+		SDL_RenderCopyEx(renderer, water, NULL, &dst, 0, NULL, SDL_FLIP_VERTICAL);
+	}
 }

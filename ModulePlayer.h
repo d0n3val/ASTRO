@@ -29,6 +29,9 @@ public:
 	Animation idle;
 	Animation up;
 	Animation down;
+	Animation forward;
+	Animation backward;
+	Animation thruster;
 	iPoint position;
 	Collider* col;
 	bool destroyed = false;

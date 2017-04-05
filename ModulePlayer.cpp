@@ -16,19 +16,36 @@
 ModulePlayer::ModulePlayer()
 {
 	// idle animation (just the ship)
-	idle.PushBack({0, 42, 70, 21});
+	idle.PushBack({7, 4, 321, 147});
 
 	// move upwards
-	up.PushBack({ 0, 21, 70, 21 });
-	up.PushBack({ 0,  0, 70, 21 });
+	up.PushBack({ 7, 327, 321, 147 });
+	//up.PushBack({ 0,  0, 70, 21 });
 	up.loop = false;
 	up.speed = 0.1f;
 
 	// Move down
-	down.PushBack({ 0, 63, 70, 21 });
-	down.PushBack({ 0, 84, 70, 21 });
+	down.PushBack({ 7, 160, 321, 147 });
+	//down.PushBack({ 0, 84, 70, 21 });
 	down.loop = false;
 	down.speed = 0.1f;
+
+	// Move forward
+	forward.PushBack({ 649, 4, 321, 147 });
+	//forward.PushBack({ 0, 84, 70, 21 });
+	forward.loop = false;
+	forward.speed = 0.1f;
+
+	// Move backwards
+	backward.PushBack({ 329, 4, 321, 147 });
+	//backward.PushBack({ 0, 84, 70, 21 });
+	backward.loop = false;
+	backward.speed = 0.1f;
+
+	// thruster
+	thruster.PushBack({ 652, 536, 87, 51 });
+	//thruster.PushBack({ 0, 84, 70, 21 });
+	thruster.speed = 0.1f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -39,7 +56,7 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	graphics = App->textures->Load("astro/ship.png");
+	graphics = App->textures->Load("astro/player_sprites.png");
 
 	destroyed = false;
 	position.x = 150;
@@ -67,13 +84,46 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	bool i_bwd = App->input->keyboard[SDL_SCANCODE_LEFT] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_LEFT] == KEY_STATE::KEY_DOWN;
+	bool i_fwd = App->input->keyboard[SDL_SCANCODE_RIGHT] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_RIGHT] == KEY_STATE::KEY_DOWN;
+	bool i_up = App->input->keyboard[SDL_SCANCODE_UP] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_UP] == KEY_STATE::KEY_DOWN;
+	bool i_down = App->input->keyboard[SDL_SCANCODE_DOWN] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_DOWN] == KEY_STATE::KEY_DOWN;
+	bool i_shoot = App->input->keyboard[SDL_SCANCODE_SPACE] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_SPACE] == KEY_STATE::KEY_DOWN;
+
 	position.x += 1; // Automatic movement
 
-	int speed = 3;
+	int speed = 6;
 
-	if (App->input->keyboard[SDL_SCANCODE_DOWN] == KEY_STATE::KEY_REPEAT)
+	if(i_bwd)
 	{
-		if (position.y - App->render->camera.y < SCREEN_HEIGHT - 24 - WATER_HEIGHT)
+		if(position.x - App->render->camera.x > 0)
+			position.x -= speed;
+
+		if (current_animation != &backward)
+		{
+			backward.Reset();
+			current_animation = &backward;
+		}
+	}
+
+	if(i_fwd)
+	{
+		if (position.x - App->render->camera.x < SCREEN_WIDTH - 70)
+		{
+			position.x += speed;
+			//App->render->DrawQuad({ 0, position.y+19, position.x+40, 2}, 223, 90, 182, 200);
+		}
+
+		if (current_animation != &forward)
+		{
+			forward.Reset();
+			current_animation = &forward;
+		}
+	}
+
+	if (i_down)
+	{
+		if (position.y - App->render->camera.y < SCREEN_HEIGHT - 160 - WATER_HEIGHT)
 			position.y += speed;
 
 		if (current_animation != &down)
@@ -83,7 +133,7 @@ update_status ModulePlayer::Update()
 		}
 	}
 
-	if (App->input->keyboard[SDL_SCANCODE_UP] == KEY_STATE::KEY_REPEAT)
+	if (i_up)
 	{
 		if (position.y - App->render->camera.y > 0)
 			position.y -= speed;
@@ -94,38 +144,27 @@ update_status ModulePlayer::Update()
 			current_animation = &up;
 		}
 	}
-
-	if(App->input->keyboard[SDL_SCANCODE_LEFT] == KEY_STATE::KEY_REPEAT)
-	{
-		if(position.x - App->render->camera.x > 0)
-			position.x -= speed;
-	}
-
-	if(App->input->keyboard[SDL_SCANCODE_RIGHT] == KEY_STATE::KEY_REPEAT)
-	{
-		if (position.x - App->render->camera.x < SCREEN_WIDTH - 70)
-		{
-			position.x += speed;
-			App->render->DrawQuad({ 0, position.y+19, position.x+40, 2}, 223, 90, 182, 200);
-		}
-	}
 	
-	if(App->input->keyboard[SDL_SCANCODE_SPACE] == KEY_STATE::KEY_REPEAT)
+	if(i_shoot)
 	{
 		//App->particles->AddParticle(App->particles->laser, position.x + 20, position.y, COLLIDER_PLAYER_SHOT);
 		//score+=13;
-		App->render->DrawQuad({position.x + 68, position.y + 5, SCREEN_WIDTH, 3 }, 208, 130, 214, 200);
+		//App->render->DrawQuad({position.x + 68, position.y + 5, SCREEN_WIDTH, 3 }, 208, 130, 214, 200);
 	}
 
-	if(App->input->keyboard[SDL_SCANCODE_S] == KEY_STATE::KEY_IDLE
-	   && App->input->keyboard[SDL_SCANCODE_W] == KEY_STATE::KEY_IDLE)
+	if(!i_up && !i_down && !i_fwd && !i_bwd && current_animation != &idle)
 		current_animation = &idle;
 
 	col->SetPos(position.x, position.y);
 
 	// Draw everything --------------------------------------
 	if(destroyed == false)
+	{
+		if(i_fwd)
+			App->render->Blit(graphics, position.x-84, position.y, &(thruster.GetCurrentFrame()));
+
 		App->render->Blit(graphics, position.x, position.y, &(current_animation->GetCurrentFrame()));
+	}
 
 	// Draw UI (score) --------------------------------------
 	//sprintf_s(score_text, 10, "%7d", score);

@@ -32,13 +32,12 @@ bool ModuleSceneSpace::Start()
 	background0 = App->textures->Load("astro/background0.png");
 	background = App->textures->Load("astro/background.png");
 	hud = App->textures->Load("rtype/hud.png");
-	water = SDL_CreateRGBSurface(0, 600, 40, SDL_GetWindowPixelFormat(App->window->window), 0, 0, 0, 0);
-	twater = SDL_CreateTexture(App->render->renderer, SDL_GetWindowPixelFormat(App->window->window), SDL_TEXTUREACCESS_STREAMING, 600, 24);
 
 	App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
 	App->enemies->Enable();
+	App->render->effect_water = true;
 
 	/*
 	App->audio->PlayMusic("rtype/stage1.ogg", 1.0f);
@@ -76,13 +75,13 @@ bool ModuleSceneSpace::CleanUp()
 
  	App->textures->Unload(background);
 	App->textures->Unload(background0);
-	SDL_DestroyTexture(twater);
-	SDL_FreeSurface(water);
 
 	App->enemies->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
 	App->player->Disable();
+
+	App->render->effect_water = false;
 
 	return true;
 }
@@ -93,9 +92,9 @@ update_status ModuleSceneSpace::Update()
 	// Move camera forward -----------------------------
 	App->render->camera.x += 1 * SCREEN_SIZE;
 
-	int s = 600;
-	int s0 = 600 * 0.5f;
-	int s1 = 600 * 2.0f;
+	int s = 1920;
+	int s0 = 1920 * 0.5f;
+	int s1 = 1920 * 2.0f;
 
 	if (App->render->camera.x % s == 0)
 		scroll += s;
@@ -105,49 +104,12 @@ update_status ModuleSceneSpace::Update()
 
 	// Draw everything --------------------------------------
 	App->render->Blit(background0, scroll0, 0, NULL, 0.5f);
-	App->render->Blit(background0, scroll0 + 600, 0, NULL, 0.5f);
+	App->render->Blit(background0, scroll0 + s, 0, NULL, 0.5f);
 
-	App->render->Blit(background, scroll, 0, NULL);
-	App->render->Blit(background, scroll + s, 0, NULL);
+	App->render->Blit(background, scroll, 250, NULL);
+	App->render->Blit(background, scroll + s, 250, NULL);
 
 	//App->render->Blit(hud, 0, 240, NULL, 0.0f, false);
 
-	// Water reflection -------------------------------------
-	
-
-
-	SDL_Rect screen_chunk = { 0, 600-189, 600, 40 };
-	//SDL_BlitSurface(App->window->screen_surface, &screen_chunk, water, NULL);
-	
-	//twater = SDL_CreateTextureFromSurface(App->render->renderer, water);
-	
-	void* pixels = nullptr;
-	int pitch = 0;
-	SDL_LockTexture(twater, NULL, &pixels, &pitch);
-
-	//if(SDL_MUSTLOCK(water))
-		//SDL_LockSurface(water);
-	Uint32 format;
-	SDL_QueryTexture(twater, &format, NULL, NULL, NULL);
-	int r = SDL_RenderReadPixels(App->render->renderer, &screen_chunk, format, pixels, pitch);
-	if (r != 0)
-	{
-		LOG("Cannot read pixels: %s\n", SDL_GetError());
-	}
-
-	//SDL_Texture* t = SDL_CreateTextureFromSurface(App->render->renderer, water);
-
-	//SDL_UpdateTexture(twater, NULL, pixels, pitch);
-	
-	//if (SDL_MUSTLOCK(water))
-		//SDL_UnlockSurface(water);
-
-	SDL_UnlockTexture(twater);
-	
-
-	//App->render->Blit(twater, 0, 0, NULL, 1.0f, false);
-
-	//SDL_DestroyTexture(t);
-	
 	return UPDATE_CONTINUE;
 }
