@@ -15,30 +15,33 @@
 
 ModulePlayer::ModulePlayer()
 {
+	int w = 300;
+	int h = 142;
+
 	// idle animation (just the ship)
-	idle.PushBack({7, 4, 321, 147});
+	idle.PushBack({113, 51, w, h});
 
 	// move upwards
-	up.PushBack({ 7, 327, 321, 147 });
-	//up.PushBack({ 0,  0, 70, 21 });
+	up.PushBack({ 113, 707, w, h });
+	up.PushBack({ 113, 502, w, h });
 	up.loop = false;
 	up.speed = 0.1f;
 
 	// Move down
-	down.PushBack({ 7, 160, 321, 147 });
-	//down.PushBack({ 0, 84, 70, 21 });
+	down.PushBack({ 689, 502, w, h });
+	down.PushBack({ 689, 707, w, h });
 	down.loop = false;
 	down.speed = 0.1f;
 
 	// Move forward
-	forward.PushBack({ 649, 4, 321, 147 });
-	//forward.PushBack({ 0, 84, 70, 21 });
+	forward.PushBack({ 113, 51, w, h });
+	//forward.PushBack({ 0, 84, w, h });
 	forward.loop = false;
 	forward.speed = 0.1f;
 
 	// Move backwards
-	backward.PushBack({ 329, 4, 321, 147 });
-	//backward.PushBack({ 0, 84, 70, 21 });
+	backward.PushBack({ 120, 888, w, h });
+	//backward.PushBack({ 0, 84, w, h });
 	backward.loop = false;
 	backward.speed = 0.1f;
 
@@ -46,6 +49,15 @@ ModulePlayer::ModulePlayer()
 	thruster.PushBack({ 652, 536, 87, 51 });
 	//thruster.PushBack({ 0, 84, 70, 21 });
 	thruster.speed = 0.1f;
+
+	// banking right to left
+	banking.PushBack({99, 274, w, h});
+	banking.PushBack({488, 270, w, h});
+	banking.PushBack({809, 265, w, h});
+	banking.PushBack({1077, 265, w, h});
+	banking.PushBack({1474, 265, w, h});
+	banking.loop = false;
+	banking.speed = 0.2f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -56,7 +68,7 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	graphics = App->textures->Load("astro/player_sprites.png");
+	graphics = App->textures->Load("astro/spritesheet_pixelart.png");
 
 	destroyed = false;
 	position.x = 150;
@@ -94,16 +106,22 @@ update_status ModulePlayer::Update()
 
 	int speed = 6;
 
+	if(!i_up && !i_down && !i_fwd && !i_bwd && current_animation != &idle)
+		current_animation = &idle;
+
 	if(i_bwd)
 	{
 		if(position.x - App->render->camera.x > 0)
 			position.x -= speed;
 
-		if (current_animation != &backward)
+		if (facing_right == true && current_animation != &banking)
 		{
-			backward.Reset();
-			current_animation = &backward;
+			banking.Reset();
+			current_animation = &banking;
+			facing_right = false;
 		}
+		else if(banking.Finished())
+			current_animation = &idle;
 	}
 
 	if(i_fwd)
@@ -114,11 +132,14 @@ update_status ModulePlayer::Update()
 			//App->render->DrawQuad({ 0, position.y+19, position.x+40, 2}, 223, 90, 182, 200);
 		}
 
-		if (current_animation != &forward)
+		if (facing_right == false && current_animation != &banking)
 		{
-			forward.Reset();
-			current_animation = &forward;
+			banking.Reset();
+			current_animation = &banking;
+			facing_right = true;
 		}
+		else if(banking.Finished())
+			current_animation = &idle;
 	}
 
 	if (i_down)
@@ -152,18 +173,19 @@ update_status ModulePlayer::Update()
 		//App->render->DrawQuad({position.x + 68, position.y + 5, SCREEN_WIDTH, 3 }, 208, 130, 214, 200);
 	}
 
-	if(!i_up && !i_down && !i_fwd && !i_bwd && current_animation != &idle)
-		current_animation = &idle;
 
 	col->SetPos(position.x, position.y);
 
 	// Draw everything --------------------------------------
 	if(destroyed == false)
 	{
-		if(i_fwd)
-			App->render->Blit(graphics, position.x-84, position.y, &(thruster.GetCurrentFrame()));
+		//if(i_fwd)
+			//App->render->Blit(graphics, position.x-84, position.y, &(thruster.GetCurrentFrame()));
 
-		App->render->Blit(graphics, position.x, position.y, &(current_animation->GetCurrentFrame()));
+		if(facing_right)
+			App->render->Blit(graphics, position.x, position.y, &(current_animation->GetCurrentFrame()));
+		else
+			App->render->Blit(graphics, position.x, position.y, &(current_animation->GetCurrentFrame()), 1.0f, true, true);
 	}
 
 	// Draw UI (score) --------------------------------------

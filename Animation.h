@@ -55,6 +55,7 @@ public:
 
 	void Reset()
 	{
+		loops = 0;
 		current_frame = 0.0f;
 	}
 };

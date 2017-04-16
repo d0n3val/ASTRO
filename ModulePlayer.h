@@ -32,7 +32,9 @@ public:
 	Animation forward;
 	Animation backward;
 	Animation thruster;
+	Animation banking;
 	iPoint position;
+	bool facing_right = true;
 	Collider* col;
 	bool destroyed = false;
 };
