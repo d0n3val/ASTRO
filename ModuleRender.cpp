@@ -71,6 +71,14 @@ bool ModuleRender::Init()
 				SDL_SetTextureColorMod(water, 100, 100, 255);
 			}
 		}
+
+		if (SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT) != 0)
+		{
+			LOG("Could not set render logical size SDL_Error: %s\n", SDL_GetError());
+			ret = false;
+		}
+
+		SDL_RenderSetScale(renderer, 0.5f, 0.5f);
 	}
 
 	return ret;

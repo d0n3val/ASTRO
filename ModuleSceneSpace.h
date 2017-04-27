@@ -18,6 +18,7 @@ public:
 
 public:
 	
+	SDL_Texture* sprites = nullptr;
 	SDL_Texture* background = nullptr;
 	SDL_Texture* background0 = nullptr;
 	SDL_Texture* hud = nullptr;

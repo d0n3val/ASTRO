@@ -29,6 +29,7 @@ bool ModuleSceneSpace::Start()
 {
 	LOG("Loading space scene");
 	
+	sprites = App->textures->Load("astro/background_sprites.png");
 	background0 = App->textures->Load("astro/background0.png");
 	background = App->textures->Load("astro/background.png");
 	hud = App->textures->Load("rtype/hud.png");
@@ -75,6 +76,7 @@ bool ModuleSceneSpace::CleanUp()
 
  	App->textures->Unload(background);
 	App->textures->Unload(background0);
+	App->textures->Unload(sprites);
 
 	App->enemies->Disable();
 	App->collision->Disable();
@@ -89,6 +91,22 @@ bool ModuleSceneSpace::CleanUp()
 // Update: draw background
 update_status ModuleSceneSpace::Update()
 {
+	SDL_Rect bg = { 0,0,24,1080 };
+	for(int i = 0; i < SCREEN_WIDTH / bg.w; ++i)
+		App->render->Blit(sprites, i * bg.w, 0, &bg, false);
+
+	SDL_Rect ice1 = { 39, 124, 351, 111 };
+	SDL_Rect ice2 = { 41, 249, 1089, 467 };
+	SDL_Rect ice3 = { 41, 729, 339, 209 };
+
+	int sea_level = 979;
+	App->render->Blit(sprites, 50, sea_level - ice1.h, &ice1);
+
+	App->render->Blit(sprites, 450, sea_level - ice2.h, &ice2);
+
+	App->render->Blit(sprites, 1500, sea_level - ice3.h, &ice3);
+
+	/*
 	// Move camera forward -----------------------------
 	App->render->camera.x += 1 * SCREEN_SIZE;
 
@@ -110,6 +128,7 @@ update_status ModuleSceneSpace::Update()
 	App->render->Blit(background, scroll + s, 250, NULL);
 
 	//App->render->Blit(hud, 0, 240, NULL, 0.0f, false);
+	*/
 
 	return UPDATE_CONTINUE;
 }
