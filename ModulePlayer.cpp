@@ -102,7 +102,7 @@ update_status ModulePlayer::Update()
 	bool i_down = App->input->keyboard[SDL_SCANCODE_DOWN] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_DOWN] == KEY_STATE::KEY_DOWN;
 	bool i_shoot = App->input->keyboard[SDL_SCANCODE_SPACE] == KEY_STATE::KEY_REPEAT || App->input->keyboard[SDL_SCANCODE_SPACE] == KEY_STATE::KEY_DOWN;
 
-	position.x += 1; // Automatic movement
+	position.x += 3; // Automatic movement
 
 	int speed = 6;
 

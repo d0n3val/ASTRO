@@ -77,9 +77,18 @@ bool ModuleSceneSpace::Start()
 
 	// per layer
 	{
-		int quantity = 20; // could be calculated based on map width and a %
+		int size = min_margin + ice1.w;
 
+		for (int n = 0; n < MAX_ICEBERGS; ++n)
+		{
+			int r = randomRange(min_margin-ice1.w, map_width - min_margin);
 
+			for (int i = 0; i < n; ++i)
+				while (r + size >= iceberg1[i] && r <= iceberg1[i] + size )
+					r = randomRange(min_margin - ice1.w, map_width - min_margin);
+
+			iceberg1[n] = r;
+		}
 	}
 
 
@@ -117,16 +126,24 @@ update_status ModuleSceneSpace::Update()
 	SDL_Rect ice3 = { 41, 729, 339, 209 };
 
 	int sea_level = 979;
+
+	for (int n = 0; n < MAX_ICEBERGS; ++n)
+	{
+		App->render->Blit(sprites, iceberg1[n], sea_level - ice1.h, &ice1);
+	}
+
+	/*
 	App->render->Blit(sprites, 50, sea_level - ice1.h, &ice1);
 
 	App->render->Blit(sprites, 450, sea_level - ice2.h, &ice2);
 
 	App->render->Blit(sprites, 1500, sea_level - ice3.h, &ice3);
+	*/
 
-	/*
+	
 	// Move camera forward -----------------------------
-	App->render->camera.x += 1 * SCREEN_SIZE;
-
+	App->render->camera.x += 3 * SCREEN_SIZE;
+	/*
 	int s = 1920;
 	int s0 = 1920 * 0.5f;
 	int s1 = 1920 * 2.0f;
