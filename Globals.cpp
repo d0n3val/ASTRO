@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <random>
 
 #ifdef _WIN32
 	#include "SDL/include/SDL_log.h"
@@ -18,4 +19,15 @@ void log(const char file[], int line, const char* format, ...)
 	va_end(ap);
 	snprintf(tmp_string2, 4096, "\n%s(%d) : %s", file, line, tmp_string);
 	SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "%s", tmp_string2);
+}
+
+float random()
+{
+	return std::rand() / static_cast<float>(RAND_MAX);
+}
+
+int randomRange(int low, int high)
+{
+	int range = high - low;
+	return static_cast<int>(random() * range) + low;
 }

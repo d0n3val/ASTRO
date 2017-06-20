@@ -7,7 +7,8 @@
 	#include "SDL_rect.h"
 #endif
 
-
+float random();
+int randomRange(int low, int high);
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, ##__VA_ARGS__)
 

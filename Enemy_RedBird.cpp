@@ -38,6 +38,6 @@ void Enemy_RedBird::Move()
 			wave -= 0.05f;
 	}
 
-	position.y = original_y + (25.0f * sinf(wave));
+	position.y = original_y + int(25.0f * sinf(wave));
 	position.x -= 1;
 }

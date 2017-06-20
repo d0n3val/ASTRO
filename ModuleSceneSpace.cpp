@@ -66,6 +66,23 @@ bool ModuleSceneSpace::Start()
 
 	App->enemies->AddEnemy(ENEMY_TYPES::MECH, 900, 195);
 	*/
+
+	// Generate random icerbergs in the background
+	int map_width = 5000;
+	int min_margin = 10;
+
+	SDL_Rect ice1 = { 39, 124, 351, 111 };
+	SDL_Rect ice2 = { 41, 249, 1089, 467 };
+	SDL_Rect ice3 = { 41, 729, 339, 209 };
+
+	// per layer
+	{
+		int quantity = 20; // could be calculated based on map width and a %
+
+
+	}
+
+
 	return true;
 }
 

@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "Globals.h"
 #include "MemLeaks.h"
+#include <random>
+#include <ctime>
 
 #ifdef _WIN32
 	#include "SDL/include/SDL.h"
@@ -25,6 +27,7 @@ Application* App = nullptr;
 int main(int argc, char* argv[])
 {
 	ReportMemoryLeaks();
+	std::srand(std::time(0));
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
